@@ -24,26 +24,59 @@ if (rst) state<=0;
 else state<=next_state;
 
 always@(state) begin //defining states
-case (state)
-s0: begin highway=green;  country_road=red; end
-s1: begin highway=yellow; country_road=red; end
-s2: begin highway=red;    country_road=red; end
-s3: begin highway=red;    country_road=green; end
-s4: begin highway=red;    country_road=yellow; end
-endcase
-end //end state
+    case (state)
+    s0: begin 
+    highway=green;  
+    country_road=red;    
+    end
+    
+    s1: begin 
+    highway=yellow; 
+    country_road=red;    
+    end
+    s2: begin 
+    highway=red;    
+    country_road=red;    
+    end
+    s3: begin 
+    highway=red;    
+    country_road=green;  
+    end
+    s4: begin 
+    highway=red;    
+    country_road=yellow; 
+    end
+    endcase
+    end //end state
 
 always@(state, x) begin //fsm
-case (state)
-s0: if(x) next_state=s1; else next_state=s0;
-s1: begin repeat(`delay_yellow_to_red) @(posedge clk) next_state=s1; 
-next_state=s2; end
-s2: begin repeat(`delay_red_to_green) @(posedge clk)  next_state=s2;
-next_state=s3; end
-s3: if (x) next_state=s3; else next_state=s4; 
-s4: begin repeat(`delay_yellow_to_red) @(posedge clk) next_state=s4; 
-next_state=s0; end
-default: next_state=s0;
-endcase
-end//fsm end
+    case (state)
+    s0: begin 
+    if(x) 
+    next_state=s1; 
+    else 
+    next_state=s0; 
+    end
+    s1: begin 
+    repeat(`delay_yellow_to_red) @(posedge clk) 
+    next_state=s1; 
+    next_state=s2; 
+    end
+    s2: begin 
+    repeat(`delay_red_to_green) @(posedge clk)  
+    next_state=s2;
+    next_state=s3; 
+    end
+    s3: begin
+    if (x) 
+    next_state=s3; 
+    else next_state=s4; 
+    end
+    s4: begin repeat(`delay_yellow_to_red) @(posedge clk) 
+    next_state=s4; 
+    next_state=s0; 
+    end
+    default: next_state=s0;
+    endcase
+    end//fsm end
 endmodule
